@@ -1,0 +1,88 @@
+ File Descriptions and Code
+
+1. requirements.txt
+This file lists all the Python dependencies required to run the project.
+
+2. config.py
+Configuration file containing Azure service credentials and settings.
+
+3. translator/__init__.py
+Initializer for the translator package.
+
+4. translator/audio_processor.py
+Handles audio transcription using Azure Speech-to-Text service.
+
+5. translator/translator_service.py
+Handles text translation using Azure Translator service.
+
+6. main.py
+Main script to execute the audio translation workflow.
+
+Documentation
+
+Overview
+The Audio Translator is a Python-based application that transcribes audio files into text and then translates the transcribed text into a specified language using Azure's Cognitive Services. It leverages Azure Speech-to-Text for transcription and Azure Translator for translation.
+
+File Breakdown
+config.py
+
+Purpose: Stores configuration variables such as API keys and region information for Azure services.
+Functions:
+None (holds constants for configuration).
+
+translator/audio_processor.py
+Purpose: Handles the transcription of audio files using Azure Speech-to-Text.
+Functions:
+transcribe_audio(audio_file_path: str) -> str: Takes the path to an audio file, transcribes it, and returns the transcribed text.
+
+translator/translator_service.py
+Purpose: Handles translation of text using Azure Translator.
+Functions:
+translate_text(text: str, target_language: str = 'en') -> str: Takes text and a target language code, translates the text, and returns the translated text.
+
+main.py
+Purpose: Acts as the entry point for the application, orchestrating the transcription and translation processes.
+Functions:
+main(): Parses command-line arguments, invokes transcription and translation functions, and handles exceptions.
+
+requirements.txt
+Purpose: Lists all Python dependencies required for the project.
+Contents:
+azure-cognitiveservices-speech: Azure SDK for Speech services.
+azure-ai-translation-text: Azure SDK for Translator services.
+
+README.md
+Purpose: Provides an overview of the project, setup instructions, and usage guidelines.
+
+Setup and Installation
+Clone the Repository
+Create a Virtual Environment
+It's recommended to use a virtual environment to manage dependencies.
+Install Dependencies
+pip install -r requirements.txt
+Configure Azure Credentials
+Open the config.py file.
+Replace 'YOUR_AZURE_SPEECH_KEY', 'YOUR_AZURE_SPEECH_REGION', 'YOUR_AZURE_TRANSLATOR_KEY', and 'YOUR_AZURE_TRANSLATOR_REGION' with your actual Azure credentials.
+
+Running the Application
+Execute the main.py script with the path to your audio file and specify the target language if desired.
+Arguments:
+path/to/audiofile.wav: Replace with the path to your audio file.
+--target_lang es: (Optional) Replace es with your desired target language code (e.g., en for English, fr for French).
+Example
+Output:
+Error Handling
+The application includes basic error handling to manage issues such as:
+Unrecognized speech in the audio file.
+Cancellation of the transcription process.
+HTTP errors from the translation service.
+Errors will be printed to the console with a descriptive message.
+Extensibility
+The project is structured to allow easy addition of features, such as:
+Supporting multiple audio formats.
+Adding support for multiple translation services.
+Integrating a user interface.
+Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
+License
+This project is licensed under the MIT License.
