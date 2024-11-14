@@ -27,6 +27,14 @@ class TranslatorApp:
         self.text_area = tk.Text(root, height=10, width=40)
         self.text_area.pack(pady=20)
         
+        # Initialize speech synthesizer
+        speech_config = speechsdk.SpeechConfig(
+            subscription=self.speech_key, 
+            region=self.service_region
+        )
+        speech_config.speech_synthesis_voice_name = 'en-US-JennyNeural'
+        self.speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
+
     def toggle_listening(self):
         if not self.is_listening:
             self.speak_button.config(text="Stop Listening", bg="red")
@@ -36,6 +44,12 @@ class TranslatorApp:
         else:
             self.speak_button.config(text="Speak", bg="SystemButtonFace")
             self.is_listening = False
+
+    def speak_translation(self, text):
+        try:
+            self.speech_synthesizer.speak_text_async(text).get()
+        except Exception as ex:
+            self.update_text_area(f"Speech synthesis error: {str(ex)}\n")
 
     def start_translation(self):
         translation_config = speechsdk.translation.SpeechTranslationConfig(
@@ -61,6 +75,13 @@ class TranslatorApp:
                 for language, translation in evt.result.translations.items():
                     translated_text = f"Translated to {language}: {translation}\n"
                     self.update_text_area(translated_text)
+                    
+                    # Speak the translated text in a separate thread
+                    threading.Thread(
+                        target=self.speak_translation,
+                        args=(translation,),
+                        daemon=True
+                    ).start()
 
         def handle_canceled(evt):
             if evt.cancellation_details.reason == speechsdk.CancellationReason.Error:
